@@ -1,5 +1,6 @@
 // EMAIL
 const cfg = process.env; // Get server configurations
+
 const nodemailer = require("nodemailer");
 
 // Connect with email service
@@ -23,10 +24,11 @@ const sendEmail = (recipients, subject, body) => {
     })
     .then((info) => {
       // console.log({ info });
-      console.log(`VirtualOffice sent an email to ${recipients}`);
+      console.log(`(+) VirtualOffice sent an email to ${recipients}`);
     })
     .catch((err) => {
-      console.log(err);
+      console.log(`(!) VirtualOffice failed to send email.`);
+      // console.log(err);
     });
 };
 
