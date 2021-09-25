@@ -1,4 +1,6 @@
 // DATABASE
+const cfg = process.env; // Get server configurations
+const mysql = require("mysql");
 
 // Start MySQL connection
 const db = mysql.createConnection({
@@ -7,13 +9,13 @@ const db = mysql.createConnection({
   password: cfg.DB_PASSWORD,
   database: cfg.DB_DATABASE,
 });
-
 // Check DB initial configuration
 db.connect((err) => {
   if (err) {
     console.log(
       "Error connecting to VirtualOffice database. Maybe MySQL isn't running?"
     );
+    console.log(err);
     process.exit();
   }
   console.log("Connected with VirtualOffice database.");
@@ -24,9 +26,9 @@ db.connect((err) => {
       if (error) throw error;
       if (results.length) {
         if (results[0].vo_value == "done") {
-          cfg.NEED_INITIAL_SETUP = false;
+          cfg.NEEDS_INITIAL_SETUP = false;
         } else {
-          cfg.NEED_INITIAL_SETUP = true;
+          cfg.NEEDS_INITIAL_SETUP = true;
           console.log(
             "VirtualOffice requires an initial setup by the administrator."
           );
@@ -35,3 +37,5 @@ db.connect((err) => {
     }
   );
 });
+
+module.exports = db;

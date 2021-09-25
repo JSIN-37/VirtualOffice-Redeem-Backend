@@ -4,11 +4,11 @@ const fs = require("fs");
 
 if (fs.existsSync("./config/production.cfg")) {
   require("dotenv").config({ path: "./config/production.cfg" });
-  console.log("Running on production configuration.");
+  console.log("Loaded production configuration.");
 } else {
   if (fs.existsSync("./config/development.cfg")) {
     require("dotenv").config({ path: "./config/development.cfg" });
-    console.log("Running on development configuration.");
+    console.log("Loaded development configuration.");
   } else {
     console.log(
       "Couldn't find a valid configuration.\nCheck config 'directory' for either 'production.cfg' or 'development.cfg' files?"
@@ -17,6 +17,4 @@ if (fs.existsSync("./config/production.cfg")) {
   }
 }
 
-// Store configuration
-const cfg = process.env;
-cfg.NEED_INITIAL_SETUP = true; // By default let's say yes, check with database later
+process.env.NEEDS_INITIAL_SETUP = true; // By default let's say yes, check with database later

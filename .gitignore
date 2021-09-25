@@ -3,3 +3,5 @@ config/*
 !config/example.cfg
 log/*
 !log/.gitkeep
+upload/*
+!upload/.gitkeep
