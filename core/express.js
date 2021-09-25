@@ -5,8 +5,12 @@ const express = require("express");
 const https = require("https");
 const http = require("http");
 const fs = require("fs");
+const cors = require("cors");
 
 const app = express();
+app.use(express.json()); // to support JSON-encoded bodies
+app.use(express.urlencoded({ extended: true })); // to support application/x-www-form-urlencoded
+app.use(cors());
 
 // Get HTTPS Certs
 var key = fs.readFileSync(
@@ -31,11 +35,13 @@ httpsServer = https
 
 let httpServer;
 if (cfg.HTTP_ENABLED == "true") {
-  console.log(`(!) [WARNING] HTTP Enabled.`);
+  console.log(`(!) [WARNING] HTTP is enabled.`);
   httpServer = http
     .createServer(app)
     .listen(cfg.HTTP_PORT, cfg.HOST_NAME, () => {
-      console.log(`*** Listening at: http://${cfg.HOST_NAME}:${cfg.HTTP_PORT}/api`);
+      console.log(
+        `*** Listening at: http://${cfg.HOST_NAME}:${cfg.HTTP_PORT}/api`
+      );
     });
 }
 

@@ -24,10 +24,10 @@ const sendEmail = (recipients, subject, body) => {
     })
     .then((info) => {
       // console.log({ info });
-      console.log(`(+) VirtualOffice sent an email to ${recipients}`);
+      console.log(`(✔) VirtualOffice sent an email to ${recipients}`);
     })
     .catch((err) => {
-      console.log(`(!) VirtualOffice failed to send email.`);
+      console.log(`(✖) VirtualOffice failed to send an email.`);
       // console.log(err);
     });
 };

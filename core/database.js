@@ -14,11 +14,11 @@ const db = mysql.createConnection({
 db.connect((err) => {
   if (err) {
     console.log(
-      "(!) Error connecting to VirtualOffice database. Maybe MySQL isn't running?"
+      "(✖) Error connecting to database. Maybe MySQL isn't running?"
     );
     process.exit();
   }
-  console.log("(+) Connected with VirtualOffice database.");
+  console.log("(✔) Connected with database.");
   // Check if VO DB needs initial setup
   db.query(
     `SELECT vo_value FROM vo_settings WHERE vo_option = "admin_setup"`,
