@@ -6,7 +6,14 @@ const router = express.Router();
 const db = require("../core/database");
 
 router.get("/certificate", (req, res) => {
-  res.download("cert/TinyCA/TinyCA.pem", "vo_cert.pem");
+  if (cfg.SERVER_MODE == "PROD") {
+    res.json({
+      error:
+        "VirtualOffice API isn't running on development mode for you to do that operation.",
+    });
+    return;
+  }
+  res.download("cert/TinyCA/TinyCA.pem", "root_certificate.pem");
 });
 
 router.get("/reset", async (req, res) => {
