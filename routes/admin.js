@@ -6,6 +6,8 @@ const router = express.Router();
 // const db = require("../core/database");
 const jwt = require("jsonwebtoken");
 
+const { verifyToken, verifyAdmin } = require("../middleware/auth");
+
 router.post("/login", async (req, res) => {
   // Body Content
   const password = req.body.password;
@@ -41,6 +43,13 @@ router.post("/login", async (req, res) => {
   }
   res.status(401).json({ error: "Admin login failed." });
   console.log(`(+) System administrator login failure from IP: ${req.ip}`);
+});
+
+router.post("/check-token", verifyToken, verifyAdmin, (req, res) => {
+  console.log(
+    `(+) System administrator checked validity of a token from IP: ${req.ip}`
+  );
+  res.json({ success: "Token is still valid." });
 });
 
 module.exports = router;
