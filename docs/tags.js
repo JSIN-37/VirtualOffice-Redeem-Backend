@@ -1,10 +1,10 @@
 module.exports = {
   tags: [
     {
-      name: "Todo CRUD operations",
+      name: "Admin Operations",
     },
     {
-      name: "Admin",
+      name: "Todo CRUD operations",
     },
   ],
 };

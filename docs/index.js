@@ -3,6 +3,7 @@ const basicInfo = require("./basicInfo");
 const servers = require("./servers");
 const tags = require("./tags");
 const components = require("./components");
+const admin = require("./admin");
 const todos = require("./todos");
 
 module.exports = {
@@ -10,5 +11,8 @@ module.exports = {
   ...servers,
   ...tags,
   ...components,
-  ...todos,
+  paths: {
+    ...admin,
+    ...todos,
+  },
 };
