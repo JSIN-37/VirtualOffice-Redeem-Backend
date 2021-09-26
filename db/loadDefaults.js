@@ -14,6 +14,10 @@ module.exports = async () => {
           "38b2575d2f3cec6d1c8296ee22bdf4bcc658c3bf371d10259b249c5a308f1480bad087d72cf026b78b9ea609a6eb49f3f61ca1ab6540286f36edc3875354f3de",
       },
       {
+        voOption: "admin_email",
+        voValue: "",
+      },
+      {
         voOption: "admin_setup",
         voValue: "",
       },
