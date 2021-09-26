@@ -13,7 +13,7 @@ var util = require("util");
 var log_file = fs.createWriteStream(`log/${todayEPOCH}.log`, { flags: "a" });
 var log_stdout = process.stdout;
 
-console.log = function (d) {
+console.log = (d) => {
   log_file.write(new Date().toISOString() + ": " + util.format(d) + "\n");
   log_stdout.write(util.format(d) + "\n");
 };

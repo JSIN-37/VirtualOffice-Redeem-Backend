@@ -13,36 +13,57 @@ app.use(express.urlencoded({ extended: true })); // to support application/x-www
 app.use(cors());
 
 // Get HTTPS Certs
-var key = fs.readFileSync(
-  `./cert/${cfg.CERTIFICATE_FOLDER}/${cfg.CERTIFICATE_FOLDER}.key`
-);
-var cert = fs.readFileSync(
-  `./cert/${cfg.CERTIFICATE_FOLDER}/${cfg.CERTIFICATE_FOLDER}.crt`
-);
+var key, cert;
+try {
+  key = fs.readFileSync(
+    `./cert/${cfg.CERTIFICATE_FOLDER}/${cfg.CERTIFICATE_FOLDER}.key`
+  );
+  cert = fs.readFileSync(
+    `./cert/${cfg.CERTIFICATE_FOLDER}/${cfg.CERTIFICATE_FOLDER}.crt`
+  );
+} catch (error) {
+  console.log(
+    "(✖) Error reading certificates. Check if your CERTIFICATE_FOLDER is correct."
+  );
+  if (cfg.DEBUGGING_MODE) console.log(error);
+  process.exit();
+}
+console.log(`(✔) Loaded certificates from "${cfg.CERTIFICATE_FOLDER}".`);
+
 var certOptions = {
   key: key,
   cert: cert,
 };
 
-let httpsServer;
-httpsServer = https
-  .createServer(certOptions, app)
-  .listen(cfg.HTTPS_PORT, cfg.HOST_NAME, () => {
+let httpsServer = https.createServer(certOptions, app);
+httpsServer.listen(cfg.HTTPS_PORT, cfg.HOST_NAME, () => {
+  console.log(
+    `*** HTTPS listening at: https://${cfg.HOST_NAME}:${cfg.HTTPS_PORT}/api`
+  );
+});
+httpsServer.on("error", (error) => {
+  console.log(
+    "(✖) Error creating HTTPS server on given configuration. Check if your HOST_NAME, HTTPS_PORT is correct."
+  );
+  if (cfg.DEBUGGING_MODE) console.log(error);
+  process.exit();
+});
+
+if (cfg.HTTP_ENABLED == "true") {
+  console.log(`(!) HTTP is enabled.`);
+  let httpServer = http.createServer(app);
+  httpServer.listen(cfg.HTTP_PORT, cfg.HOST_NAME, () => {
     console.log(
-      `*** Listening at: https://${cfg.HOST_NAME}:${cfg.HTTPS_PORT}/api`
+      `*** HTTP listening at: http://${cfg.HOST_NAME}:${cfg.HTTP_PORT}/api`
     );
   });
-
-let httpServer;
-if (cfg.HTTP_ENABLED == "true") {
-  console.log(`(!) [WARNING] HTTP is enabled.`);
-  httpServer = http
-    .createServer(app)
-    .listen(cfg.HTTP_PORT, cfg.HOST_NAME, () => {
-      console.log(
-        `*** Listening at: http://${cfg.HOST_NAME}:${cfg.HTTP_PORT}/api`
-      );
-    });
+  httpServer.on("error", (error) => {
+    console.log(
+      "(✖) Error creating HTTP server on given configuration. Check if your HOST_NAME, HTTP_PORT is correct."
+    );
+    if (cfg.DEBUGGING_MODE) console.log(error);
+    process.exit();
+  });
 }
 
 module.exports = app;
