@@ -3,7 +3,7 @@ const cfg = process.env; // Get server configurations
 
 const express = require("express");
 const router = express.Router();
-const db = require("../core/database2.js");
+const db = require("../core/database");
 
 router.get("/certificate", (req, res) => {
   res.download("cert/TinyCA/TinyCA.pem", "vo_cert.pem");
@@ -17,17 +17,20 @@ router.get("/reset", async (req, res) => {
     });
     return;
   }
+  require("../models");
   console.log("(!) Resetting database...");
   db.sync({ force: true })
-    .then(() => {
-      console.log("Drop and re-sync db.");
+    .then(async () => {
+      let loadDefaults = require("../db/loadDefaults");
+      await loadDefaults();
+      res.json({ success: "Database reset complete." });
+      console.log("(✔) Database reset complete.");
     })
     .catch((error) => {
+      res.json({ error: "Database reset failed." });
       console.log("(✖) Error resetting database.");
       if (cfg.DEBUGGING_MODE) console.log(error);
     });
-  res.json({ success: "Database reset complete." });
-  console.log("(✔) Database reset complete.");
 });
 
 module.exports = router;

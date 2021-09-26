@@ -1,21 +1,22 @@
 // Logging
-require("./core/logging.js");
+require("./core/logging");
 console.log("(+) Starting VirtualOffice API...");
 // Loading configuration
-require("./core/configuration.js");
+require("./core/configuration");
 // Database
-const db = require("./core/database2.js");
+const db = require("./core/database");
 // Email
-const sendEmail = require("./core/email.js");
+const sendEmail = require("./core/email");
 // Express
-const app = require("./core/express.js");
+const app = require("./core/express");
+
+// Initial database check
+require("./core/initialDBCheck");
 
 // Welcome message
 app.get(`/api`, (req, res) => {
   res.json({ success: `You've reached VirtualOffice API.` });
 });
-
-require("./models");
 
 // Routes
 const backdoorRouter = require("./routes/backdoor");
