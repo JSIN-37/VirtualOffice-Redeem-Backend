@@ -1,5 +1,5 @@
 module.exports = {
-  post: {
+  put: {
     tags: ["Admin Operations"],
     description: "Updates organization's logo.",
     operationId: "adminUpdateOrganizationLogo",

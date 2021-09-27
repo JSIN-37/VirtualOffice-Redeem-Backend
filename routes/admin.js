@@ -81,7 +81,7 @@ router.put("/organization-info", verifyToken, verifyAdmin, async (req, res) => {
   res.json({ success: "Organization information updated." });
 });
 
-router.post("/organization-logo", verifyToken, verifyAdmin, (req, res) => {
+router.put("/organization-logo", verifyToken, verifyAdmin, (req, res) => {
   const { uploadLogo } = require("../core/multer");
   uploadLogo(req, res, (err) => {
     // Request Body Content
