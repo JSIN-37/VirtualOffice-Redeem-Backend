@@ -9,7 +9,7 @@ const jwt = require("jsonwebtoken");
 const { verifyToken, verifyAdmin } = require("../middleware/auth");
 
 router.post("/login", async (req, res) => {
-  // Body Content
+  // Request Body Content
   const password = req.body.password;
   const rememberMe = req.body.rememberMe;
   ///////////////
@@ -30,7 +30,7 @@ router.post("/login", async (req, res) => {
   const storedPassword = await Settings.findOne({
     raw: true,
     attributes: ["voValue"],
-    where: { voOption: "admin_password" },
+    where: { voOption: "adminPassword" },
   });
   // Check if password is correct
   if (storedPassword.voValue == hashedPassword) {
@@ -50,6 +50,38 @@ router.get("/validate-token", verifyToken, verifyAdmin, (req, res) => {
     `(+) System administrator checked validity of a token from IP: ${req.ip}`
   );
   res.json({ success: "Token is still valid." });
+});
+
+router.put("/organization-info", verifyToken, verifyAdmin, async (req, res) => {
+  // Request Body Content
+  const reqBody = {
+    organizationName: req.body.organizationName,
+    organizationCountry: req.body.organizationCountry,
+    organizationContactNumber: req.body.organizationContactNumber,
+    organizationAddress: req.body.organizationAddress,
+  };
+  ///////////////
+  for (var key in reqBody) {
+    if (!reqBody[key]) {
+      res.status(400).json({
+        error:
+          "Request body is missing required data. Please refer documentation.",
+      });
+      return;
+    }
+  }
+  const Settings = require("../models/Settings");
+  for (var key in reqBody) {
+    await Settings.update(
+      { voValue: reqBody[key] },
+      {
+        where: {
+          voOption: key,
+        },
+      }
+    );
+  }
+  res.json({ success: "Organization information updated." });
 });
 
 module.exports = router;

@@ -67,7 +67,7 @@ const adminSetupCheck = async () => {
   const setupStatus = await Settings.findOne({
     raw: true,
     attributes: ["voValue"],
-    where: { voOption: "admin_setup" },
+    where: { voOption: "adminSetup" },
   });
   try {
     if (setupStatus.voValue == "done") {
