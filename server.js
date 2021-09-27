@@ -10,8 +10,6 @@ const db = require("./core/database");
 const sendEmail = require("./core/email");
 // Express
 const app = require("./core/express");
-// Initial database check
-require("./core/initialDBCheck");
 // Welcome message
 app.get(`/api`, (req, res) => {
   res.json({ success: `You've reached VirtualOffice API.` });
