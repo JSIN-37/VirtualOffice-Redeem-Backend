@@ -14,11 +14,10 @@ router.post("/login", async (req, res) => {
   const rememberMe = req.body.rememberMe;
   ///////////////
   if (!password) {
-    res.status(400).json({
+    return res.status(400).json({
       error:
         "Request body is missing required data. Please refer documentation.",
     });
-    return;
   }
   const expireTime = rememberMe == true ? "4h" : "2h";
   const hashedPassword = require("crypto")
@@ -37,12 +36,11 @@ router.post("/login", async (req, res) => {
     const token = jwt.sign({ isAdmin: true }, cfg.JWT_KEY, {
       expiresIn: expireTime,
     });
-    res.json({ token });
     console.log(`(+) System administrator just logged in from IP: ${req.ip}`);
-    return;
+    return res.json({ token });
   }
-  res.status(401).json({ error: "Admin login failed." });
   console.log(`(+) System administrator login failure from IP: ${req.ip}`);
+  res.status(401).json({ error: "Admin login failed." });
 });
 
 router.get("/validate-token", verifyToken, verifyAdmin, (req, res) => {
@@ -63,11 +61,10 @@ router.put("/organization-info", verifyToken, verifyAdmin, async (req, res) => {
   ///////////////
   for (var key in reqBody) {
     if (!reqBody[key]) {
-      res.status(400).json({
+      return res.status(400).json({
         error:
           "Request body is missing required data. Please refer documentation.",
       });
-      return;
     }
   }
   const Settings = require("../models/Settings");
@@ -90,16 +87,15 @@ router.post("/organization-logo", verifyToken, verifyAdmin, (req, res) => {
     // Request Body Content
     const file = req.file;
     ////////////////////
-    if (err) {
-      if (cfg.DEBUGGING_MODE) console.log(err);
-      return res.status(500).json({ error: "Updating logo failed." }); // TODO: find a better way for this
-    }
     if (!file) {
-      res.status(400).json({
+      return res.status(400).json({
         error:
           "Request body is missing required data. Please refer documentation.",
       });
-      return;
+    }
+    if (err) {
+      if (cfg.DEBUGGING_MODE) console.log(err);
+      return res.status(400).json({ error: "Updating logo failed." });
     }
     return res.json({ success: "Organization logo updated." });
   });

@@ -7,22 +7,20 @@ const db = require("../core/database");
 
 router.get("/certificate", (req, res) => {
   if (cfg.SERVER_MODE == "PROD") {
-    res.json({
+    return res.json({
       error:
         "VirtualOffice API isn't running on development mode for you to do that operation.",
     });
-    return;
   }
   res.download("cert/TinyCA/TinyCA.pem", "root_certificate.pem");
 });
 
 router.get("/reset", async (req, res) => {
   if (cfg.SERVER_MODE == "PROD") {
-    res.json({
+    return res.json({
       error:
         "VirtualOffice API isn't running on development mode for you to do that operation.",
     });
-    return;
   }
   require("../models");
   console.log("(!) Resetting database...");
