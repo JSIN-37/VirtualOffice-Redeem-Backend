@@ -5,8 +5,8 @@ module.exports = {
       description: "Functions open for anyone to use.",
     },
     {
-      name: "Employee Operations",
-      description: "User (employee) functions.",
+      name: "User Operations",
+      description: "Employee functions.",
     },
     {
       name: "Admin Operations",

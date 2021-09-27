@@ -7,6 +7,7 @@ const admin = require("./admin");
 const common = require("./common");
 const public = require("./public");
 const backdoor = require("./backdoor");
+const user = require("./user");
 
 module.exports = {
   ...basicInfo,
@@ -15,6 +16,7 @@ module.exports = {
   ...components,
   paths: {
     ...admin,
+    ...user,
     ...common,
     ...public,
     ...backdoor,

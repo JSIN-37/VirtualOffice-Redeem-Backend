@@ -1,9 +1,9 @@
 module.exports = {
   post: {
-    tags: ["Admin Operations"],
+    tags: ["User Operations"],
     description:
-      "System administrator login. Upon successful authentication, a JWT token will be returned that can be used for subsequent API authentication. If rememberMe is set, the token will be generated with a longer expiry.",
-    operationId: "adminLogin",
+      "User login. Upon successful authentication, a JWT token will be returned that can be used for subsequent API authentication. If rememberMe is set, the token will be generated with a longer expiry.",
+    operationId: "userLogin",
     parameters: [],
     requestBody: {
       required: true,
@@ -12,6 +12,10 @@ module.exports = {
           schema: {
             type: "object",
             properties: {
+              email: {
+                type: "string",
+                example: "example.user@gmail.com",
+              },
               password: {
                 type: "string",
                 example: "virtualoffice@123",
@@ -21,7 +25,7 @@ module.exports = {
                 example: "true",
               },
             },
-            required: ["password"],
+            required: ["email", "password"],
           },
         },
       },
@@ -39,16 +43,20 @@ module.exports = {
                   example:
                     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc0FkbWluIjp0cnVlLCJpYXQiOjE2MzI2ODU1OTYsImV4cCI6MTYzMjY5Mjc5Nn0.gAea59R6Lx7oIc7s3E1Mc1AiI1RQMEcxny7_xkZTGVA",
                 },
+                userRole: {
+                  type: "string",
+                  example: "Worker",
+                },
               },
             },
           },
         },
       },
       400: {
-        description: "Password is missing in request body.",
+        description: "Email or password is missing in request body.",
       },
       401: {
-        description: "Authentication failed, wrong password.",
+        description: "Authentication failed, wrong email or password.",
       },
       500: {
         description:
