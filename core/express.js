@@ -66,4 +66,7 @@ if (cfg.HTTP_ENABLED == "true") {
   });
 }
 
+// Serve the uploads folder
+app.use("/uploads", express.static(__dirname + "/../uploads"));
+
 module.exports = app;

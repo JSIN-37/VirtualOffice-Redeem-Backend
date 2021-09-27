@@ -84,4 +84,25 @@ router.put("/organization-info", verifyToken, verifyAdmin, async (req, res) => {
   res.json({ success: "Organization information updated." });
 });
 
+router.post("/organization-logo", verifyToken, verifyAdmin, (req, res) => {
+  const { uploadLogo } = require("../core/multer");
+  uploadLogo(req, res, (err) => {
+    // Request Body Content
+    const file = req.file;
+    ////////////////////
+    if (err) {
+      if (cfg.DEBUGGING_MODE) console.log(err);
+      return res.status(500).json({ error: "Updating logo failed." }); // TODO: find a better way for this
+    }
+    if (!file) {
+      res.status(400).json({
+        error:
+          "Request body is missing required data. Please refer documentation.",
+      });
+      return;
+    }
+    return res.json({ success: "Organization logo updated." });
+  });
+});
+
 module.exports = router;

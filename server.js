@@ -5,11 +5,13 @@ console.log("(+) Starting VirtualOffice API...");
 require("./core/configuration");
 const cfg = process.env; // Get server configurations
 // Database
-const db = require("./core/database");
+require("./core/database");
 // Email
-const sendEmail = require("./core/email");
+require("./core/email");
 // Express
 const app = require("./core/express");
+// Multer
+require("./core/multer");
 // Welcome message
 app.get(`/api`, (req, res) => {
   res.json({ success: `You've reached VirtualOffice API.` });
