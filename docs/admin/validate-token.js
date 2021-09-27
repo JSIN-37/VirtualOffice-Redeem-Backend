@@ -2,8 +2,8 @@ module.exports = {
   get: {
     tags: ["Admin Operations"],
     description:
-      "System administrator token check. An existing token can be sent to verify whether it is still valid (i.e. not expired).",
-    operationId: "adminCheckToken",
+      "System administrator token validation. An existing token can be sent to verify whether it is still valid (i.e. not expired).",
+    operationId: "adminValidateToken",
     parameters: [],
     security: [{ bearerAuth: [] }],
     responses: {

@@ -6,6 +6,7 @@ module.exports = {
     operationId: "adminLogin",
     parameters: [],
     requestBody: {
+      required: true,
       content: {
         "application/json": {
           schema: {
@@ -20,6 +21,7 @@ module.exports = {
                 example: "true",
               },
             },
+            required: ["password"],
           },
         },
       },

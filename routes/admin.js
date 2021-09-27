@@ -45,7 +45,7 @@ router.post("/login", async (req, res) => {
   console.log(`(+) System administrator login failure from IP: ${req.ip}`);
 });
 
-router.get("/check-token", verifyToken, verifyAdmin, (req, res) => {
+router.get("/validate-token", verifyToken, verifyAdmin, (req, res) => {
   console.log(
     `(+) System administrator checked validity of a token from IP: ${req.ip}`
   );
