@@ -10,11 +10,11 @@ module.exports = {
       200: {
         description: "Token is still valid (not expired yet).",
       },
-      403: {
-        description: "Token was not sent in the authorization header.",
-      },
       401: {
         description: "Token has expired.",
+      },
+      403: {
+        description: "Token was not sent with the request in the authorization header.",
       },
       500: {
         description:

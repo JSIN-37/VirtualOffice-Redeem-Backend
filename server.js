@@ -29,9 +29,11 @@ if (cfg.SERVE_DOCUMENTATION == "true") {
 const publicRouter = require("./routes/public");
 const adminRouter = require("./routes/admin");
 const backdoorRouter = require("./routes/backdoor");
+const commonRouter = require("./routes/common");
 app.use(`/api/public`, publicRouter);
 app.use(`/api/admin`, adminRouter);
 app.use(`/api/backdoor`, backdoorRouter);
+app.use(`/api/common`, commonRouter);
 
 // Catch all other routes
 app.use((req, res, next) => {

@@ -47,7 +47,10 @@ module.exports = {
         description: "Some required property/s is/are missing in request body.",
       },
       401: {
-        description: "Authentication failed.",
+        description: "Authentication failed. Most likely the token is expired.",
+      },
+      403: {
+        description: "Token was not sent with the request in the authorization header.",
       },
       500: {
         description:

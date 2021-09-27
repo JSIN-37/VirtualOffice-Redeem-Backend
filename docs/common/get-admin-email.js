@@ -13,7 +13,7 @@ module.exports = {
             schema: {
               type: "object",
               properties: {
-                email: {
+                adminEmail: {
                   type: "string",
                   example: "virtualoffice.admin@gmail.com",
                 },
@@ -23,7 +23,11 @@ module.exports = {
         },
       },
       401: {
-        description: "Authentication failed.",
+        description: "Authentication failed. Most likely the token is expired.",
+      },
+      403: {
+        description:
+          "Token was not sent with the request in the authorization header.",
       },
       500: {
         description:

@@ -3,7 +3,6 @@ const cfg = process.env; // Get server configurations
 
 const express = require("express");
 const router = express.Router();
-// const db = require("../core/database");
 const jwt = require("jsonwebtoken");
 
 const { verifyToken, verifyAdmin } = require("../middleware/auth");
@@ -99,6 +98,43 @@ router.put("/organization-logo", verifyToken, verifyAdmin, (req, res) => {
     }
     return res.json({ success: "Organization logo updated." });
   });
+});
+
+router.put("/credentials", verifyToken, verifyAdmin, async (req, res) => {
+  // Request Body Content
+  const reqBody = {
+    adminEmail: req.body.adminEmail,
+    adminPassword: req.body.adminPassword,
+    adminSetup: "done",
+  };
+  ///////////////
+  for (var key in reqBody) {
+    if (!reqBody[key]) {
+      return res.status(400).json({
+        error:
+          "Request body is missing required data. Please refer documentation.",
+      });
+    }
+  }
+  reqBody.adminPassword = require("crypto")
+    .createHash("sha512")
+    .update(reqBody.adminPassword)
+    .digest("hex");
+  const Settings = require("../models/Settings");
+  for (var key in reqBody) {
+    await Settings.update(
+      { voValue: reqBody[key] },
+      {
+        where: {
+          voOption: key,
+        },
+      }
+    );
+  }
+  // Set adminSetup state globally on server
+  const { adminSetupCheck } = require("../core/database");
+  adminSetupCheck();
+  res.json({ success: "Admin credentials updated." });
 });
 
 module.exports = router;

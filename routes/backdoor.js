@@ -3,7 +3,7 @@ const cfg = process.env; // Get server configurations
 
 const express = require("express");
 const router = express.Router();
-const db = require("../core/database");
+const { db } = require("../core/database");
 
 router.get("/certificate", (req, res) => {
   if (cfg.SERVER_MODE == "PROD") {

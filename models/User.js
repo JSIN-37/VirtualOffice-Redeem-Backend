@@ -1,5 +1,5 @@
 const Sequelize = require("sequelize");
-const db = require("../core/database");
+const { db } = require("../core/database");
 
 const User = db.define("User", {
   firstName: { type: Sequelize.STRING, allowNull: false },

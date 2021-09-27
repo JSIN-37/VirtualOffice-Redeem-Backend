@@ -85,4 +85,4 @@ const adminSetupCheck = async () => {
 
 testDB();
 
-module.exports = db;
+module.exports = { db, adminSetupCheck };
