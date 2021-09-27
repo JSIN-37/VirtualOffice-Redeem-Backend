@@ -24,10 +24,12 @@ if (cfg.SERVE_DOCUMENTATION == "true") {
   );
 }
 // Routes
-const backdoorRouter = require("./routes/backdoor");
+const publicRouter = require("./routes/public");
 const adminRouter = require("./routes/admin");
-app.use(`/api/backdoor`, backdoorRouter);
+const backdoorRouter = require("./routes/backdoor");
+app.use(`/api/public`, publicRouter);
 app.use(`/api/admin`, adminRouter);
+app.use(`/api/backdoor`, backdoorRouter);
 
 // Catch all other routes
 app.use((req, res, next) => {

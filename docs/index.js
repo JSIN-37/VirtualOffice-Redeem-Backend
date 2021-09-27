@@ -5,7 +5,6 @@ const tags = require("./tags");
 const components = require("./components");
 const admin = require("./admin");
 const public = require("./public");
-const todos = require("./todos");
 
 module.exports = {
   ...basicInfo,
@@ -14,7 +13,6 @@ module.exports = {
   ...components,
   paths: {
     ...admin,
-    ...todos,
     ...public,
   },
 };
