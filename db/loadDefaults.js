@@ -37,10 +37,6 @@ module.exports = async () => {
         voOption: "organizationAddress",
         voValue: "",
       },
-      {
-        voOption: "organizationLogo",
-        voValue: "",
-      },
     ]);
     // Setup the two default roles
     let worker = await Role.create({

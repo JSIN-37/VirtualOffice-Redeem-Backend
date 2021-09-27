@@ -2,6 +2,7 @@ const login = require("./login");
 const validateToken = require("./validate-token");
 const updateOrganizationInfo = require("./update-organization-info");
 const updateOrganizationLogo = require("./update-organization-logo");
+const updateCredentials = require("./update-credentials");
 
 module.exports = {
   "/admin/login": {
@@ -15,5 +16,8 @@ module.exports = {
   },
   "/admin/organization-logo": {
     ...updateOrganizationLogo,
+  },
+  "/admin/credentials": {
+    ...updateCredentials,
   },
 };

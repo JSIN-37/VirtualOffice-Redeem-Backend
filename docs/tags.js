@@ -12,5 +12,9 @@ module.exports = {
       name: "Admin Operations",
       description: "System administrator functions.",
     },
+    {
+      name: "Common Operations",
+      description: "Functions common to users and admin.",
+    },
   ],
 };

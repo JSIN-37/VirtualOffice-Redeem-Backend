@@ -4,6 +4,7 @@ const servers = require("./servers");
 const tags = require("./tags");
 const components = require("./components");
 const admin = require("./admin");
+const common = require("./common");
 const public = require("./public");
 
 module.exports = {
@@ -13,6 +14,7 @@ module.exports = {
   ...components,
   paths: {
     ...admin,
+    ...common,
     ...public,
   },
 };
