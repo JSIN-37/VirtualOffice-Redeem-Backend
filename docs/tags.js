@@ -6,7 +6,7 @@ module.exports = {
     },
     {
       name: "Employee Operations",
-      description: "User/employee functions.",
+      description: "User (employee) functions.",
     },
     {
       name: "Admin Operations",
@@ -14,7 +14,11 @@ module.exports = {
     },
     {
       name: "Common Operations",
-      description: "Functions common to users and admin.",
+      description: "Functions common to both users and admin.",
+    },
+    {
+      name: "Backdoor Operations",
+      description: "Functions that ease developing / debugging VirtualOffice.",
     },
   ],
 };

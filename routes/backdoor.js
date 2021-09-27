@@ -32,7 +32,7 @@ router.get("/reset", async (req, res) => {
       console.log("(✔) Database reset complete.");
     })
     .catch((error) => {
-      res.json({ error: "Database reset failed." });
+      res.status(500).json({ error: "Database reset failed." });
       console.log("(✖) Error resetting database.");
       if (cfg.DEBUGGING_MODE) console.log(error);
     });

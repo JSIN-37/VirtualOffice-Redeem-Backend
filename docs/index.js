@@ -6,6 +6,7 @@ const components = require("./components");
 const admin = require("./admin");
 const common = require("./common");
 const public = require("./public");
+const backdoor = require("./backdoor");
 
 module.exports = {
   ...basicInfo,
@@ -16,5 +17,6 @@ module.exports = {
     ...admin,
     ...common,
     ...public,
+    ...backdoor,
   },
 };
