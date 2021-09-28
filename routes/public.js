@@ -6,8 +6,8 @@ const router = express.Router();
 
 router.get("/server-status", (req, res) => {
   res.json({
-    ready: true,
-    initialized: cfg.NEEDS_INITIAL_SETUP == "true" ? false : true,
+    serverReady: true,
+    serverInitialized: cfg.NEEDS_INITIAL_SETUP == "true" ? false : true,
   });
 });
 

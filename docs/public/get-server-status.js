@@ -12,12 +12,12 @@ module.exports = {
             schema: {
               type: "object",
               properties: {
-                ready: {
+                serverReady: {
                   type: "boolean",
                   example: true,
                   description: "Server state.",
                 },
-                initialized: {
+                serverInitialized: {
                   type: "boolean",
                   example: true,
                   description:
