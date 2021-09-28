@@ -3,7 +3,7 @@ const cfg = process.env; // Get server configurations
 
 const express = require("express");
 const router = express.Router();
-const { db } = require("../core/database");
+const { db, adminSetupCheck } = require("../core/database");
 
 router.get("/certificate", (req, res) => {
   if (cfg.SERVER_MODE == "PROD") {
@@ -30,6 +30,8 @@ router.get("/reset", async (req, res) => {
       await loadDefaults();
       res.json({ success: "Database reset complete." });
       console.log("(✔) Database reset complete.");
+      // Run adminSetup check again
+      adminSetupCheck();
     })
     .catch((error) => {
       res.status(500).json({ error: "Database reset failed." });
