@@ -21,12 +21,9 @@ module.exports = {
       200: {
         description: "Deleting successful.",
       },
-      404: {
-        description: "Division with specified divisionId doesn't exist.",
-      },
       400: {
         description:
-          "Division cannot be deleted since there are employees under it.",
+          "Division cannot be deleted since there are employees under it. OR you did not send the divisionId parameter.",
       },
       401: {
         description: "Authentication failed. Most likely the token is expired.",

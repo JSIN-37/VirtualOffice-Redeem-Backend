@@ -15,15 +15,15 @@ module.exports = {
               items: {
                 type: "object",
                 properties: {
-                  divisionId: {
+                  id: {
                     type: "integer",
                     example: "1",
                   },
-                  divisionName: {
+                  name: {
                     type: "string",
                     example: "Marketing Division",
                   },
-                  divisionDescription: {
+                  description: {
                     type: "string",
                     example: "Example division, handles marketing.",
                   },

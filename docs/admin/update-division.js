@@ -41,11 +41,9 @@ module.exports = {
       200: {
         description: "Updating successful.",
       },
-      404: {
-        description: "Division with specified divisionId doesn't exist.",
-      },
       400: {
-        description: "Some required property/s is/are missing in request body.",
+        description:
+          "Some required property/s is/are missing in request body/parameters.",
       },
       401: {
         description: "Authentication failed. Most likely the token is expired.",

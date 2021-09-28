@@ -137,4 +137,92 @@ router.put("/credentials", verifyToken, verifyAdmin, async (req, res) => {
   res.json({ success: "Admin credentials updated." });
 });
 
+router.get("/divisions", verifyToken, verifyAdmin, async (req, res) => {
+  const Division = require("../models/Division");
+  const allDivisions = await Division.findAll({
+    raw: true,
+    attributes: ["id", "name", "description"],
+  });
+  res.json(allDivisions);
+});
+
+router.post("/division", verifyToken, verifyAdmin, async (req, res) => {
+  // Request Body Content
+  const reqBody = {
+    divisionName: req.body.divisionName,
+    divisionDescription: req.body.divisionDescription,
+  };
+  ///////////////
+  for (var key in reqBody) {
+    if (!reqBody[key]) {
+      return res.status(400).json({
+        error:
+          "Request body is missing required data. Please refer documentation.",
+      });
+    }
+  }
+  const Division = require("../models/Division");
+  await Division.create({
+    name: reqBody.divisionName,
+    description: reqBody.divisionDescription,
+  });
+  res.json({ success: "New division created." });
+});
+
+router.put("/division/:id", verifyToken, verifyAdmin, async (req, res) => {
+  // Request Body Content
+  const reqBody = {
+    idParam: req.params.id,
+    divisionName: req.body.divisionName,
+    divisionDescription: req.body.divisionDescription,
+  };
+  ///////////////
+  for (var key in reqBody) {
+    if (!reqBody[key]) {
+      return res.status(400).json({
+        error:
+          "Request body/parameters is missing required data. Please refer documentation.",
+      });
+    }
+  }
+  const Division = require("../models/Division");
+  await Division.update(
+    { name: reqBody.divisionName, description: reqBody.divisionDescription },
+    {
+      where: {
+        id: reqBody.idParam,
+      },
+    }
+  );
+  res.json({ success: "Division updated." });
+});
+
+router.delete("/division/:id", verifyToken, verifyAdmin, async (req, res) => {
+  // Request Parameter
+  const idParam = req.params.id;
+  ///////////////
+  if (!idParam) {
+    return res.status(400).json({
+      error:
+        "Request body/parameters is missing required data. Please refer documentation.",
+    });
+  }
+  // Check if the division has no employees
+  const User = require("../models/User");
+  const employeeCount = await User.count({ where: { divisionId: idParam } });
+  if (employeeCount == 0) {
+    const Division = require("../models/Division");
+    await Division.destroy({
+      where: {
+        id: idParam,
+      },
+    });
+    return res.json({ success: "Division deleted." });
+  } else {
+    return res.status(400).json({
+      error: "Division cannot be deleted since there are employees under it.",
+    });
+  }
+});
+
 module.exports = router;
