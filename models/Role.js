@@ -4,7 +4,7 @@ const { db } = require("../core/database");
 const Role = db.define("Role", {
   name: Sequelize.STRING,
   description: Sequelize.STRING,
-  locked: Sequelize.BOOLEAN,
+  permissions: Sequelize.JSON,
 });
 
 module.exports = Role;

@@ -3,6 +3,46 @@ const User = require("../models/User");
 const Role = require("../models/Role");
 const Division = require("../models/Division");
 
+const workerPermissions = {
+  tasks: {
+    allow: true,
+    allDivisions: {
+      view: false,
+      comment: false,
+      createTask: false,
+      assignTask: false,
+      reviewTask: false,
+      editTask: false,
+      removeTask: false,
+    },
+    ownDivision: {
+      view: true,
+      comment: true,
+      createTask: true,
+      assignTask: true,
+      reviewTask: true,
+      editTask: true,
+      removeTask: true,
+    },
+    personal: {
+      view: true,
+      comment: true,
+      createTask: true,
+      assignTask: true,
+      reviewTask: true,
+      editTask: true,
+      removeTask: true,
+    },
+  },
+  teams: {
+    createTeam: true,
+  },
+  docs: {
+    allow: true,
+    publicSharing: false,
+  },
+};
+
 module.exports = async () => {
   console.log("(+) Populating default data...");
   try {
@@ -42,12 +82,12 @@ module.exports = async () => {
     let worker = await Role.create({
       name: "Worker",
       description: "Default Worker role.",
-      locked: true,
+      permissions: workerPermissions,
     });
     let hod = await Role.create({
       name: "Head of Division",
       description: "Default Head of Division role.",
-      locked: true,
+      permissions: workerPermissions,
     });
     // Create a division for the default users
     let division = await Division.create({
