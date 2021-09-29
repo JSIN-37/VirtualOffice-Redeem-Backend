@@ -2,17 +2,22 @@ const Sequelize = require("sequelize");
 const { db } = require("../core/database");
 
 const User = db.define("User", {
-  firstName: { type: Sequelize.STRING, allowNull: false },
-  lastName: Sequelize.STRING,
-  fullName: {
-    type: Sequelize.VIRTUAL,
-    get() {
-      return `${this.firstName} ${this.lastName}`;
-    },
+  firstName: {
+    type: Sequelize.STRING,
+    allowNull: false,
     set(value) {
-      throw new Error("Do not try to set the `fullName` value!");
+      this.setDataValue("fullName", `${value} ${this.lastName}`);
+      this.setDataValue("firstName", value);
     },
   },
+  lastName: {
+    type: Sequelize.STRING,
+    set(value) {
+      this.setDataValue("fullName", `${this.firstName} ${value}`);
+      this.setDataValue("lastName", value);
+    },
+  },
+  fullName: Sequelize.STRING,
   email: { type: Sequelize.STRING, allowNull: false, unique: true },
   password: {
     type: Sequelize.STRING,

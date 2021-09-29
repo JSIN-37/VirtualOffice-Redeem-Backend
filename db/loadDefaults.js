@@ -1,3 +1,6 @@
+// LOAD DEFAULTS
+const cfg = process.env; // Get server configurations
+
 const Settings = require("../models/Settings");
 const User = require("../models/User");
 const Role = require("../models/Role");

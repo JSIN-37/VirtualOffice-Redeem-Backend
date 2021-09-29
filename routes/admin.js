@@ -225,4 +225,82 @@ router.delete("/division/:id", verifyToken, verifyAdmin, async (req, res) => {
   }
 });
 
+router.get("/users", verifyToken, verifyAdmin, async (req, res) => {
+  const reqQuery = {
+    divisionId: req.query.divisionId,
+    roleId: req.query.roleId,
+    nameLike: req.query.nameLike,
+    emailLike: req.query.emailLike,
+  };
+  let filter = {};
+  const { Op } = require("sequelize");
+  if (reqQuery.divisionId) filter["divisionId"] = reqQuery.divisionId;
+  if (reqQuery.roleId) filter["roleId"] = reqQuery.roleId;
+  if (reqQuery.nameLike)
+    filter["fullName"] = { [Op.like]: `%${reqQuery.nameLike.toLowerCase()}%` };
+  if (reqQuery.emailLike)
+    filter["email"] = { [Op.like]: `%${reqQuery.emailLike.toLowerCase()}%` };
+  console.log(filter);
+  const User = require("../models/User");
+  const allUsers = await User.findAll({
+    attributes: { exclude: ["password", "createdAt", "updatedAt"] },
+    where: filter,
+  });
+  res.json(allUsers);
+});
+
+router.post("/user", verifyToken, verifyAdmin, async (req, res) => {
+  // Request Body Content
+  const reqBody = {
+    userFirstName: req.body.userFirstName,
+    userEmail: req.body.userEmail,
+    userDivisionId: req.body.userDivisionId,
+    userRoleId: req.body.userRoleId,
+  };
+  ///////////////
+  for (var key in reqBody) {
+    if (!reqBody[key]) {
+      return res.status(400).json({
+        error:
+          "Request body is missing required data. Please refer documentation.",
+      });
+    }
+  }
+  // Generate a random temporary password
+  const tempPassword = Math.random().toString(36).slice(-8);
+  const User = require("../models/User");
+  try {
+    await User.create({
+      firstName: reqBody.userFirstName,
+      email: reqBody.userEmail,
+      password: tempPassword,
+      DivisionId: reqBody.userDivisionId,
+      RoleId: reqBody.userRoleId,
+    });
+    // Check if this is the documentation email
+    if (
+      reqBody.userEmail !=
+      "please.use.real.email.here.before.trying.out.in.swagger@gmail.com"
+    ) {
+      const sendEmail = require("../core/email");
+      sendEmail(
+        reqBody.userEmail,
+        "VirtualOffice Account Registration",
+        `<center>
+        <b>Please click the link below to login to your VirtualOffice account,</b><br>
+        <a href=${cfg.FRONTEND_URL}>Login to VirtualOffice</a> <br><br>
+        Username: ${reqBody.userEmail} <br>
+        Password: ${tempPassword} <br>
+        </center>`
+      );
+    }
+    return res.json({ success: "New user created." });
+  } catch (error) {
+    if (cfg.DEBUGGING_MODE) console.log(error);
+    return res.status(405).json({
+      error: "An existing user has the same email given for new user.",
+    });
+  }
+});
+
 module.exports = router;

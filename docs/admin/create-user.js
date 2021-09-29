@@ -42,6 +42,9 @@ module.exports = {
       400: {
         description: "Some required property/s is/are missing in request body.",
       },
+      405: {
+        description: "An existing user has the same email given for new user.",
+      },
       401: {
         description: "Authentication failed. Most likely the token is expired.",
       },
