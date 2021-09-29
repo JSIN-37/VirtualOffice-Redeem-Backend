@@ -242,6 +242,13 @@ router.post("/user", verifyToken, verifyAdmin, async (req, res) => {
   if (inputsAreMissing(inputs, res)) return;
   // Generate a random temporary password
   const tempPassword = Math.random().toString(36).slice(-8);
+  // Get role permissions
+  const Role = require("../models/Role");
+  const selectedRole = await Role.findOne({
+    raw: true,
+    attributes: ["permissions"],
+    where: { id: inputs.userRoleId },
+  });
   const User = require("../models/User");
   try {
     await User.create({
@@ -250,6 +257,7 @@ router.post("/user", verifyToken, verifyAdmin, async (req, res) => {
       password: tempPassword,
       DivisionId: inputs.userDivisionId,
       RoleId: inputs.userRoleId,
+      permissions: JSON.parse(selectedRole.permissions),
     });
     // Check if this is the documentation email
     if (

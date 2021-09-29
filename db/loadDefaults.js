@@ -108,6 +108,7 @@ module.exports = async () => {
       address: "8013, Cross Rd., Forest Hills",
       RoleId: worker.id,
       DivisionId: division.id,
+      permissions: workerPermissions,
     });
     await User.create({
       email: "sophia@gmail.com",
@@ -119,6 +120,7 @@ module.exports = async () => {
       address: "245, Peachtree Drive, Lakeland",
       RoleId: hod.id,
       DivisionId: division.id,
+      permissions: workerPermissions,
     });
     console.log("(✔) Default data imported.");
   } catch (error) {
