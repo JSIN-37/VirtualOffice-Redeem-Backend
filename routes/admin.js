@@ -27,8 +27,8 @@ router.post("/login", async (req, res) => {
     password: req.body.password,
     rememberMe: req.body.rememberMe,
   };
-  ///////////////
   if (inputsAreMissing(inputs, res)) return;
+  ///////////////
   const expireTime = inputs.rememberMe == true ? "4h" : "2h";
   const hashedPassword = require("crypto")
     .createHash("sha512")
@@ -68,8 +68,8 @@ router.put("/organization-info", verifyToken, verifyAdmin, async (req, res) => {
     organizationContactNumber: req.body.organizationContactNumber,
     organizationAddress: req.body.organizationAddress,
   };
-  ///////////////
   if (inputsAreMissing(inputs, res)) return;
+  ///////////////
   const Settings = require("../models/Settings");
   for (var key in inputs) {
     await Settings.update(
@@ -91,8 +91,8 @@ router.put("/organization-logo", verifyToken, verifyAdmin, (req, res) => {
     const inputs = {
       file: req.file,
     };
-    ////////////////////
     if (inputsAreMissing(inputs, res)) return;
+    ////////////////////
     if (err) {
       if (cfg.DEBUGGING_MODE) console.log(err);
       return res.status(400).json({ error: "Updating logo failed." });
@@ -108,8 +108,8 @@ router.put("/credentials", verifyToken, verifyAdmin, async (req, res) => {
     adminPassword: req.body.adminPassword,
     adminSetup: "done",
   };
-  ///////////////
   if (inputsAreMissing(inputs, res)) return;
+  ///////////////
   inputs.adminPassword = require("crypto")
     .createHash("sha512")
     .update(inputs.adminPassword)
@@ -146,8 +146,8 @@ router.post("/division", verifyToken, verifyAdmin, async (req, res) => {
     divisionName: req.body.divisionName,
     divisionDescription: req.body.divisionDescription,
   };
-  ///////////////
   if (inputsAreMissing(inputs, res)) return;
+  ///////////////
   const Division = require("../models/Division");
   await Division.create({
     name: inputs.divisionName,
@@ -163,8 +163,8 @@ router.put("/division/:id", verifyToken, verifyAdmin, async (req, res) => {
     divisionName: req.body.divisionName,
     divisionDescription: req.body.divisionDescription,
   };
-  ///////////////
   if (inputsAreMissing(inputs, res)) return;
+  ///////////////
   const Division = require("../models/Division");
   await Division.update(
     { name: inputs.divisionName, description: inputs.divisionDescription },
@@ -182,8 +182,8 @@ router.delete("/division/:id", verifyToken, verifyAdmin, async (req, res) => {
   const inputs = {
     idParam: req.params.id,
   };
-  ///////////////
   if (inputsAreMissing(inputs, res)) return;
+  ///////////////
   // Check if the division has no employees
   const User = require("../models/User");
   const employeeCount = await User.count({
@@ -221,7 +221,6 @@ router.get("/users", verifyToken, verifyAdmin, async (req, res) => {
     filter["fullName"] = { [Op.like]: `%${inputs.nameLike.toLowerCase()}%` };
   if (inputs.emailLike)
     filter["email"] = { [Op.like]: `%${inputs.emailLike.toLowerCase()}%` };
-  console.log(filter);
   const User = require("../models/User");
   const allUsers = await User.findAll({
     attributes: { exclude: ["password", "createdAt", "updatedAt"] },
@@ -238,8 +237,8 @@ router.post("/user", verifyToken, verifyAdmin, async (req, res) => {
     userDivisionId: req.body.userDivisionId,
     userRoleId: req.body.userRoleId,
   };
-  ///////////////
   if (inputsAreMissing(inputs, res)) return;
+  ///////////////
   // Generate a random temporary password
   const tempPassword = Math.random().toString(36).slice(-8);
   // Get role permissions
@@ -285,6 +284,64 @@ router.post("/user", verifyToken, verifyAdmin, async (req, res) => {
   }
 });
 
+router.put("/user/:id", verifyToken, verifyAdmin, async (req, res) => {
+  // Request Inputs
+  const inputs = {
+    idParam: req.params.id,
+  };
+  if (inputsAreMissing(inputs, res)) return;
+  ///////////////
+  let reqBody = req.body;
+  let properties = {};
+  if (reqBody.userFirstName) properties["firstName"] = reqBody.userFirstName;
+  if (reqBody.userLastName) properties["lastName"] = reqBody.userLastName;
+  if (reqBody.userEmail) {
+    properties["email"] = reqBody.userEmail;
+    // Generate a random temporary password
+    const tempPassword = Math.random().toString(36).slice(-8);
+    properties["password"] = tempPassword;
+    // Check if this is the documentation email
+    if (
+      reqBody.userEmail !=
+      "please.use.real.email.here.before.trying.out.in.swagger@gmail.com"
+    ) {
+      const sendEmail = require("../core/email");
+      sendEmail(
+        reqBody.userEmail,
+        "VirtualOffice Account Email/Password Change",
+        `<center>
+            <b>Please click the link below to login to your VirtualOffice account,</b><br>
+            <a href=${cfg.FRONTEND_URL}>Login to VirtualOffice</a> <br><br>
+            New Username: ${reqBody.userEmail} <br>
+            New Password: ${tempPassword} <br>
+            </center>`
+      );
+    }
+  }
+  if (reqBody.userDivisionId) properties["DivisionId"] = reqBody.userDivisionId;
+  if (reqBody.userRoleId) {
+    properties["RoleId"] = reqBody.userRoleId;
+    // Need to copy the new role permissions
+    const Role = require("../models/Role");
+    const selectedRole = await Role.findOne({
+      raw: true,
+      attributes: ["permissions"],
+      where: { id: reqBody.userRoleId },
+    });
+    properties["permissions"] = JSON.parse(selectedRole.permissions);
+  }
+  // If permissions are again defined here, it takes priority
+  if (reqBody.userPermissions)
+    properties["permissions"] = reqBody.userPermissions;
+  const User = require("../models/User");
+  await User.update(properties, {
+    where: {
+      id: inputs.idParam,
+    },
+  });
+  res.json({ success: "User updated." });
+});
+
 router.get("/roles", verifyToken, verifyAdmin, async (req, res) => {
   const Role = require("../models/Role");
   const allRoles = await Role.findAll({
@@ -301,8 +358,8 @@ router.post("/role", verifyToken, verifyAdmin, async (req, res) => {
     roleDescription: req.body.roleDescription,
     rolePermissions: req.body.rolePermissions, // TODO: PERMISSION STRUCTURE TEST
   };
-  ///////////////
   if (inputsAreMissing(inputs, res)) return;
+  ///////////////
   const Role = require("../models/Role");
   await Role.create({
     name: inputs.roleName,
@@ -321,8 +378,8 @@ router.put("/role/:id", verifyToken, verifyAdmin, async (req, res) => {
     rolePermissions: req.body.rolePermissions, // TODO: PERMISSION STRUCTURE TEST
     overwriteCustomUserPermissions: req.body.overwriteCustomUserPermissions,
   };
-  ///////////////
   if (inputsAreMissing(inputs, res)) return;
+  ///////////////
   const Role = require("../models/Role");
   await Role.update(
     {
@@ -358,8 +415,8 @@ router.delete("/role/:id", verifyToken, verifyAdmin, async (req, res) => {
   const inputs = {
     idParam: req.params.id,
   };
-  ///////////////
   if (inputsAreMissing(inputs, res)) return;
+  ///////////////
   // Check if the division has no employees
   const User = require("../models/User");
   const employeeCount = await User.count({

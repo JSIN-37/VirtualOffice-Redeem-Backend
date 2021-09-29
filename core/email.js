@@ -23,12 +23,12 @@ const sendEmail = (recipients, subject, body) => {
       html: body, // html body
     })
     .then((info) => {
-      console.log(`(✔) VirtualOffice sent an email to ${recipients}`);
       if (cfg.DEBUGGING_MODE) console.log({ info });
+      console.log(`(✔) VirtualOffice sent an email to ${recipients}`);
     })
     .catch((error) => {
-      console.log(`(✖) VirtualOffice failed to send an email.`);
       if (cfg.DEBUGGING_MODE) console.log(error);
+      console.log(`(✖) VirtualOffice failed to send an email.`);
     });
 };
 
