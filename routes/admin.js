@@ -7,21 +7,32 @@ const jwt = require("jsonwebtoken");
 
 const { verifyToken, verifyAdmin } = require("../middleware/auth");
 
-router.post("/login", async (req, res) => {
-  // Request Body Content
-  const password = req.body.password;
-  const rememberMe = req.body.rememberMe;
-  ///////////////
-  if (!password) {
-    return res.status(400).json({
-      error:
-        "Request body is missing required data. Please refer documentation.",
-    });
+// TODO: Might be a global thing in the future
+const inputsAreMissing = (inputs, res) => {
+  for (var key in inputs) {
+    if (!inputs[key]) {
+      res.status(400).json({
+        error:
+          "Request body/query/parameters is missing required data. Please refer documentation.",
+      });
+      return true;
+    }
   }
-  const expireTime = rememberMe == true ? "4h" : "2h";
+  return false;
+};
+
+router.post("/login", async (req, res) => {
+  // Request Inputs
+  const inputs = {
+    password: req.body.password,
+    rememberMe: req.body.rememberMe,
+  };
+  ///////////////
+  if (inputsAreMissing(inputs, res)) return;
+  const expireTime = inputs.rememberMe == true ? "4h" : "2h";
   const hashedPassword = require("crypto")
     .createHash("sha512")
-    .update(password)
+    .update(inputs.password)
     .digest("hex");
   // Get stored password in database
   const Settings = require("../models/Settings");
@@ -50,26 +61,19 @@ router.get("/validate-token", verifyToken, verifyAdmin, (req, res) => {
 });
 
 router.put("/organization-info", verifyToken, verifyAdmin, async (req, res) => {
-  // Request Body Content
-  const reqBody = {
+  // Request Inputs
+  const inputs = {
     organizationName: req.body.organizationName,
     organizationCountry: req.body.organizationCountry,
     organizationContactNumber: req.body.organizationContactNumber,
     organizationAddress: req.body.organizationAddress,
   };
   ///////////////
-  for (var key in reqBody) {
-    if (!reqBody[key]) {
-      return res.status(400).json({
-        error:
-          "Request body is missing required data. Please refer documentation.",
-      });
-    }
-  }
+  if (inputsAreMissing(inputs, res)) return;
   const Settings = require("../models/Settings");
-  for (var key in reqBody) {
+  for (var key in inputs) {
     await Settings.update(
-      { voValue: reqBody[key] },
+      { voValue: inputs[key] },
       {
         where: {
           voOption: key,
@@ -84,14 +88,11 @@ router.put("/organization-logo", verifyToken, verifyAdmin, (req, res) => {
   const { uploadLogo } = require("../core/multer");
   uploadLogo(req, res, (err) => {
     // Request Body Content
-    const file = req.file;
+    const inputs = {
+      file: req.file,
+    };
     ////////////////////
-    if (!file) {
-      return res.status(400).json({
-        error:
-          "Request body is missing required data. Please refer documentation.",
-      });
-    }
+    if (inputsAreMissing(inputs, res)) return;
     if (err) {
       if (cfg.DEBUGGING_MODE) console.log(err);
       return res.status(400).json({ error: "Updating logo failed." });
@@ -101,29 +102,22 @@ router.put("/organization-logo", verifyToken, verifyAdmin, (req, res) => {
 });
 
 router.put("/credentials", verifyToken, verifyAdmin, async (req, res) => {
-  // Request Body Content
-  const reqBody = {
+  // Request Inputs
+  const inputs = {
     adminEmail: req.body.adminEmail,
     adminPassword: req.body.adminPassword,
     adminSetup: "done",
   };
   ///////////////
-  for (var key in reqBody) {
-    if (!reqBody[key]) {
-      return res.status(400).json({
-        error:
-          "Request body is missing required data. Please refer documentation.",
-      });
-    }
-  }
-  reqBody.adminPassword = require("crypto")
+  if (inputsAreMissing(inputs, res)) return;
+  inputs.adminPassword = require("crypto")
     .createHash("sha512")
-    .update(reqBody.adminPassword)
+    .update(inputs.adminPassword)
     .digest("hex");
   const Settings = require("../models/Settings");
-  for (var key in reqBody) {
+  for (var key in inputs) {
     await Settings.update(
-      { voValue: reqBody[key] },
+      { voValue: inputs[key] },
       {
         where: {
           voOption: key,
@@ -147,50 +141,36 @@ router.get("/divisions", verifyToken, verifyAdmin, async (req, res) => {
 });
 
 router.post("/division", verifyToken, verifyAdmin, async (req, res) => {
-  // Request Body Content
-  const reqBody = {
+  // Request Inputs
+  const inputs = {
     divisionName: req.body.divisionName,
     divisionDescription: req.body.divisionDescription,
   };
   ///////////////
-  for (var key in reqBody) {
-    if (!reqBody[key]) {
-      return res.status(400).json({
-        error:
-          "Request body is missing required data. Please refer documentation.",
-      });
-    }
-  }
+  if (inputsAreMissing(inputs, res)) return;
   const Division = require("../models/Division");
   await Division.create({
-    name: reqBody.divisionName,
-    description: reqBody.divisionDescription,
+    name: inputs.divisionName,
+    description: inputs.divisionDescription,
   });
   res.json({ success: "New division created." });
 });
 
 router.put("/division/:id", verifyToken, verifyAdmin, async (req, res) => {
-  // Request Body Content
-  const reqBody = {
+  // Request Inputs
+  const inputs = {
     idParam: req.params.id,
     divisionName: req.body.divisionName,
     divisionDescription: req.body.divisionDescription,
   };
   ///////////////
-  for (var key in reqBody) {
-    if (!reqBody[key]) {
-      return res.status(400).json({
-        error:
-          "Request body/parameters is missing required data. Please refer documentation.",
-      });
-    }
-  }
+  if (inputsAreMissing(inputs, res)) return;
   const Division = require("../models/Division");
   await Division.update(
-    { name: reqBody.divisionName, description: reqBody.divisionDescription },
+    { name: inputs.divisionName, description: inputs.divisionDescription },
     {
       where: {
-        id: reqBody.idParam,
+        id: inputs.idParam,
       },
     }
   );
@@ -198,23 +178,22 @@ router.put("/division/:id", verifyToken, verifyAdmin, async (req, res) => {
 });
 
 router.delete("/division/:id", verifyToken, verifyAdmin, async (req, res) => {
-  // Request Parameter
-  const idParam = req.params.id;
+  // Request Inputs
+  const inputs = {
+    idParam: req.params.id,
+  };
   ///////////////
-  if (!idParam) {
-    return res.status(400).json({
-      error:
-        "Request body/parameters is missing required data. Please refer documentation.",
-    });
-  }
+  if (inputsAreMissing(inputs, res)) return;
   // Check if the division has no employees
   const User = require("../models/User");
-  const employeeCount = await User.count({ where: { divisionId: idParam } });
+  const employeeCount = await User.count({
+    where: { divisionId: inputs.idParam },
+  });
   if (employeeCount == 0) {
     const Division = require("../models/Division");
     await Division.destroy({
       where: {
-        id: idParam,
+        id: inputs.idParam,
       },
     });
     return res.json({ success: "Division deleted." });
@@ -226,20 +205,22 @@ router.delete("/division/:id", verifyToken, verifyAdmin, async (req, res) => {
 });
 
 router.get("/users", verifyToken, verifyAdmin, async (req, res) => {
-  const reqQuery = {
+  // Request Inputs
+  const inputs = {
     divisionId: req.query.divisionId,
     roleId: req.query.roleId,
     nameLike: req.query.nameLike,
     emailLike: req.query.emailLike,
   };
+  ///////////////
   let filter = {};
   const { Op } = require("sequelize");
-  if (reqQuery.divisionId) filter["divisionId"] = reqQuery.divisionId;
-  if (reqQuery.roleId) filter["roleId"] = reqQuery.roleId;
-  if (reqQuery.nameLike)
-    filter["fullName"] = { [Op.like]: `%${reqQuery.nameLike.toLowerCase()}%` };
-  if (reqQuery.emailLike)
-    filter["email"] = { [Op.like]: `%${reqQuery.emailLike.toLowerCase()}%` };
+  if (inputs.divisionId) filter["divisionId"] = inputs.divisionId;
+  if (inputs.roleId) filter["roleId"] = inputs.roleId;
+  if (inputs.nameLike)
+    filter["fullName"] = { [Op.like]: `%${inputs.nameLike.toLowerCase()}%` };
+  if (inputs.emailLike)
+    filter["email"] = { [Op.like]: `%${inputs.emailLike.toLowerCase()}%` };
   console.log(filter);
   const User = require("../models/User");
   const allUsers = await User.findAll({
@@ -250,46 +231,39 @@ router.get("/users", verifyToken, verifyAdmin, async (req, res) => {
 });
 
 router.post("/user", verifyToken, verifyAdmin, async (req, res) => {
-  // Request Body Content
-  const reqBody = {
+  // Request Inputs
+  const inputs = {
     userFirstName: req.body.userFirstName,
     userEmail: req.body.userEmail,
     userDivisionId: req.body.userDivisionId,
     userRoleId: req.body.userRoleId,
   };
   ///////////////
-  for (var key in reqBody) {
-    if (!reqBody[key]) {
-      return res.status(400).json({
-        error:
-          "Request body is missing required data. Please refer documentation.",
-      });
-    }
-  }
+  if (inputsAreMissing(inputs, res)) return;
   // Generate a random temporary password
   const tempPassword = Math.random().toString(36).slice(-8);
   const User = require("../models/User");
   try {
     await User.create({
-      firstName: reqBody.userFirstName,
-      email: reqBody.userEmail,
+      firstName: inputs.userFirstName,
+      email: inputs.userEmail,
       password: tempPassword,
-      DivisionId: reqBody.userDivisionId,
-      RoleId: reqBody.userRoleId,
+      DivisionId: inputs.userDivisionId,
+      RoleId: inputs.userRoleId,
     });
     // Check if this is the documentation email
     if (
-      reqBody.userEmail !=
+      inputs.userEmail !=
       "please.use.real.email.here.before.trying.out.in.swagger@gmail.com"
     ) {
       const sendEmail = require("../core/email");
       sendEmail(
-        reqBody.userEmail,
+        inputs.userEmail,
         "VirtualOffice Account Registration",
         `<center>
         <b>Please click the link below to login to your VirtualOffice account,</b><br>
         <a href=${cfg.FRONTEND_URL}>Login to VirtualOffice</a> <br><br>
-        Username: ${reqBody.userEmail} <br>
+        Username: ${inputs.userEmail} <br>
         Password: ${tempPassword} <br>
         </center>`
       );

@@ -21,7 +21,7 @@ module.exports = {
                 example: "true",
               },
             },
-            required: ["password"],
+            required: ["password", "rememberMe"],
           },
         },
       },
