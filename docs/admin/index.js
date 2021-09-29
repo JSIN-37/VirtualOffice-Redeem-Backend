@@ -7,6 +7,8 @@ const createDivision = require("./create-division");
 const updateDivision = require("./update-division");
 const getDivisions = require("./get-divisions");
 const deleteDivision = require("./delete-division");
+const createUser = require("./create-user");
+const getUsers = require("./get-users");
 
 module.exports = {
   "/admin/login": {
@@ -33,5 +35,11 @@ module.exports = {
   "/admin/division/{id}": {
     ...updateDivision,
     ...deleteDivision,
+  },
+  "/admin/users": {
+    ...getUsers,
+  },
+  "/admin/user": {
+    ...createUser,
   },
 };

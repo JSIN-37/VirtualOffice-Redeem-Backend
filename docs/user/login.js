@@ -48,17 +48,7 @@ module.exports = {
                   example: "Worker",
                 },
                 userPermissions: {
-                  type: "object",
-                  example: {
-                    component1: {
-                      permission1: true,
-                      permission2: false,
-                    },
-                    component2: {
-                      permission1: false,
-                      permission2: false,
-                    },
-                  },
+                  $ref: "#/components/schemas/userPermissions",
                 },
               },
             },
