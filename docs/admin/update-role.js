@@ -1,7 +1,8 @@
 module.exports = {
   put: {
     tags: ["Admin Operations"],
-    description: "Updates an existing role.",
+    description:
+      "Updates an existing role. If overwrite is enabled, all current users with this role that have customized individual permissions will be overwritten by the new permissions in the role",
     operationId: "adminUpdateRole",
     parameters: [
       {
@@ -32,6 +33,10 @@ module.exports = {
                 example: "Overlooks all the available divisions.",
               },
               rolePermissions: { $ref: "#/components/schemas/userPermissions" },
+              overwriteCustomUserPermissions: {
+                type: "boolean",
+                example: false,
+              },
             },
             required: ["roleName", "roleDescription", "rolePermissions"],
           },
