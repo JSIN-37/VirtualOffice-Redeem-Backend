@@ -295,6 +295,16 @@ router.put("/user/:id", verifyToken, verifyAdmin, async (req, res) => {
   let properties = {};
   if (reqBody.userFirstName) properties["firstName"] = reqBody.userFirstName;
   if (reqBody.userLastName) properties["lastName"] = reqBody.userLastName;
+  // Work-around for fullName issue
+  const User = require("../models/User");
+  const prevData = await User.findOne({
+    attributes: ["firstName", "lastName"],
+    where: { id: inputs.idParam },
+  });
+  if (properties.firstName == null)
+    properties["firstName"] = prevData.firstName;
+  if (properties.lastName == null) properties["lastName"] = prevData.lastName;
+  //////////////
   if (reqBody.userEmail) {
     properties["email"] = reqBody.userEmail;
     // Generate a random temporary password
@@ -333,7 +343,6 @@ router.put("/user/:id", verifyToken, verifyAdmin, async (req, res) => {
   // If permissions are again defined here, it takes priority
   if (reqBody.userPermissions)
     properties["permissions"] = reqBody.userPermissions;
-  const User = require("../models/User");
   await User.update(properties, {
     where: {
       id: inputs.idParam,
