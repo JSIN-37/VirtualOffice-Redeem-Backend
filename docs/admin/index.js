@@ -9,6 +9,11 @@ const getDivisions = require("./get-divisions");
 const deleteDivision = require("./delete-division");
 const createUser = require("./create-user");
 const getUsers = require("./get-users");
+const updateUser = require("./update-user");
+const getRoles = require("./get-roles");
+const createRole = require("./create-role");
+const updateRole = require("./update-role");
+const deleteRole = require("./delete-role");
 
 module.exports = {
   "/admin/login": {
@@ -41,5 +46,18 @@ module.exports = {
   },
   "/admin/user": {
     ...createUser,
+  },
+  "/admin/user/{id}": {
+    ...updateUser,
+  },
+  "/admin/roles": {
+    ...getRoles,
+  },
+  "/admin/role": {
+    ...createRole,
+  },
+  "/admin/role/{id}": {
+    ...updateRole,
+    ...deleteRole,
   },
 };
