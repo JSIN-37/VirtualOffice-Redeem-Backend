@@ -198,7 +198,7 @@ router.delete("/division/:id", verifyToken, verifyAdmin, async (req, res) => {
     });
     return res.json({ success: "Division deleted." });
   } else {
-    return res.status(400).json({
+    return res.status(405).json({
       error: "Division cannot be deleted since there are employees under it.",
     });
   }

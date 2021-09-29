@@ -23,7 +23,11 @@ module.exports = {
       },
       400: {
         description:
-          "Division cannot be deleted since there are employees under it. OR you did not send the divisionId parameter.",
+          "You did not send the divisionId parameter.",
+      },
+      405: {
+        description:
+          "Division cannot be deleted since there are employees under it.",
       },
       401: {
         description: "Authentication failed. Most likely the token is expired.",
