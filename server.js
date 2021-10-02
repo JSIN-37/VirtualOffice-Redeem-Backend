@@ -28,12 +28,14 @@ if (cfg.SERVE_DOCUMENTATION == "true") {
 // Routes
 const publicRouter = require("./routes/public");
 const adminRouter = require("./routes/admin");
+const userRouter = require("./routes/user");
 const backdoorRouter = require("./routes/backdoor");
 const commonRouter = require("./routes/common");
 app.use(`/api/public`, publicRouter);
 app.use(`/api/admin`, adminRouter);
 app.use(`/api/backdoor`, backdoorRouter);
 app.use(`/api/common`, commonRouter);
+app.use(`/api/user`, userRouter);
 
 // Catch all other routes
 app.use((req, res, next) => {

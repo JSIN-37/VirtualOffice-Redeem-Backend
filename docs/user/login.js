@@ -14,7 +14,7 @@ module.exports = {
             properties: {
               email: {
                 type: "string",
-                example: "example.user@gmail.com",
+                example: "john@gmail.com",
               },
               password: {
                 type: "string",
@@ -43,16 +43,65 @@ module.exports = {
                   example:
                     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc0FkbWluIjp0cnVlLCJpYXQiOjE2MzI2ODU1OTYsImV4cCI6MTYzMjY5Mjc5Nn0.gAea59R6Lx7oIc7s3E1Mc1AiI1RQMEcxny7_xkZTGVA",
                 },
-                userRole: {
-                  type: "string",
-                  example: "Worker",
-                },
-                userPermissions: {
-                  $ref: "#/components/schemas/userPermissions",
-                },
-                userNeedsSetup: {
-                  type: "boolean",
-                  example: false,
+                user: {
+                  type: "object",
+                  properties: {
+                    id: {
+                      type: "integer",
+                      example: 1,
+                    },
+                    firstName: {
+                      type: "string",
+                      example: "John",
+                    },
+                    lastName: {
+                      type: "string",
+                      example: "Doe",
+                    },
+                    fullName: {
+                      type: "string",
+                      example: "Doe",
+                    },
+                    email: {
+                      type: "string",
+                      example: "john@gmail.com",
+                    },
+                    dob: {
+                      type: "string",
+                      example: "1995/05/01",
+                    },
+                    gender: {
+                      type: "string",
+                      example: "Male",
+                    },
+                    address: {
+                      type: "string",
+                      example: "8013, Cross Rd., Forest Hills",
+                    },
+                    permissions: {
+                      $ref: "#/components/schemas/userPermissions",
+                    },
+                    needsSetup: {
+                      type: "boolean",
+                      example: false,
+                    },
+                    DivisionId: {
+                      type: "integer",
+                      example: 1,
+                    },
+                    RoleId: {
+                      type: "integer",
+                      example: 1,
+                    },
+                    DivisionName: {
+                      type: "string",
+                      example: "Operations Division",
+                    },
+                    RoleName: {
+                      type: "string",
+                      example: "Worker",
+                    },
+                  },
                 },
               },
             },
