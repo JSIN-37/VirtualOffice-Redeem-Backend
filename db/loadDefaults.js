@@ -6,45 +6,7 @@ const User = require("../models/User");
 const Role = require("../models/Role");
 const Division = require("../models/Division");
 
-const workerPermissions = {
-  tasks: {
-    allow: true,
-    allDivisions: {
-      view: false,
-      comment: false,
-      createTask: false,
-      assignTask: false,
-      reviewTask: false,
-      editTask: false,
-      removeTask: false,
-    },
-    ownDivision: {
-      view: true,
-      comment: true,
-      createTask: true,
-      assignTask: true,
-      reviewTask: true,
-      editTask: true,
-      removeTask: true,
-    },
-    personal: {
-      view: true,
-      comment: true,
-      createTask: true,
-      assignTask: true,
-      reviewTask: true,
-      editTask: true,
-      removeTask: true,
-    },
-  },
-  teams: {
-    createTeam: true,
-  },
-  docs: {
-    allow: true,
-    publicSharing: false,
-  },
-};
+const { examplePermissions } = require("../core/permissions");
 
 module.exports = async () => {
   console.log("(+) Populating default data...");
@@ -85,12 +47,12 @@ module.exports = async () => {
     let worker = await Role.create({
       name: "Worker",
       description: "Default Worker role.",
-      permissions: workerPermissions,
+      permissions: examplePermissions,
     });
     let hod = await Role.create({
       name: "Head of Division",
       description: "Default Head of Division role.",
-      permissions: workerPermissions,
+      permissions: examplePermissions,
     });
     // Create a division for the default users
     let division = await Division.create({
@@ -108,7 +70,7 @@ module.exports = async () => {
       address: "8013, Cross Rd., Forest Hills",
       RoleId: worker.id,
       DivisionId: division.id,
-      permissions: workerPermissions,
+      permissions: examplePermissions,
       needsSetup: false,
     });
     await User.create({
@@ -121,7 +83,7 @@ module.exports = async () => {
       address: "245, Peachtree Drive, Lakeland",
       RoleId: hod.id,
       DivisionId: division.id,
-      permissions: workerPermissions,
+      permissions: examplePermissions,
       needsSetup: false,
     });
     console.log("(✔) Default data imported.");

@@ -50,6 +50,10 @@ module.exports = {
                 userPermissions: {
                   $ref: "#/components/schemas/userPermissions",
                 },
+                userNeedsSetup: {
+                  type: "boolean",
+                  example: false,
+                },
               },
             },
           },
