@@ -85,6 +85,10 @@ module.exports = {
                   permissions: {
                     $ref: "#/components/schemas/userPermissions",
                   },
+                  needsSetup: {
+                    type: "boolean",
+                    example: "false",
+                  },
                 },
               },
             },

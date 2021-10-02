@@ -25,8 +25,8 @@ const testDB = async () => {
     console.log("(✔) Connected with database.");
     testDBIntegrity();
   } catch (error) {
-    console.log("(✖) Error connecting to database. Maybe MySQL isn't running?");
     if (cfg.DEBUGGING_MODE) console.log(error);
+    console.log("(✖) Error connecting to database. Maybe MySQL isn't running?");
     process.exit();
   }
 };
@@ -51,13 +51,13 @@ const testDBIntegrity = async () => {
         adminSetupCheck();
       })
       .catch((error) => {
-        console.log("(✖) Database initial setup failed.");
         if (cfg.DEBUGGING_MODE) console.log(error);
+        console.log("(✖) Database initial setup failed.");
         process.exit();
       });
   } catch (error) {
-    console.log("(✖) Database integrity test failed.");
     if (cfg.DEBUGGING_MODE) console.log(error);
+    console.log("(✖) Database integrity test failed.");
     process.exit();
   }
 };
@@ -77,8 +77,8 @@ const adminSetupCheck = async () => {
       console.log("(!) Initial administrator setup is required.");
     }
   } catch (error) {
-    console.log("(✖) Database appears to be corrupted.");
     if (cfg.DEBUGGING_MODE) console.log(error);
+    console.log("(✖) Database appears to be corrupted.");
     process.exit();
   }
 };

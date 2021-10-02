@@ -37,6 +37,7 @@ const User = db.define("User", {
   gender: Sequelize.STRING,
   address: Sequelize.STRING,
   permissions: Sequelize.JSON,
+  needsSetup: { type: Sequelize.BOOLEAN, allowNull: false, defaultValue: true },
 });
 
 // Relations

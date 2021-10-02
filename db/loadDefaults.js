@@ -109,6 +109,7 @@ module.exports = async () => {
       RoleId: worker.id,
       DivisionId: division.id,
       permissions: workerPermissions,
+      needsSetup: false,
     });
     await User.create({
       email: "sophia@gmail.com",
@@ -121,6 +122,7 @@ module.exports = async () => {
       RoleId: hod.id,
       DivisionId: division.id,
       permissions: workerPermissions,
+      needsSetup: false,
     });
     console.log("(✔) Default data imported.");
   } catch (error) {

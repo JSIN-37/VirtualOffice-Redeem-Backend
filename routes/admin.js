@@ -226,6 +226,10 @@ router.get("/users", verifyToken, verifyAdmin, async (req, res) => {
     attributes: { exclude: ["password", "createdAt", "updatedAt"] },
     where: filter,
   });
+  // Convert all permissions to JSON object
+  allUsers.forEach((user) => {
+    user.permissions = JSON.parse(user.permissions);
+  });
   res.json(allUsers);
 });
 
@@ -310,6 +314,7 @@ router.put("/user/:id", verifyToken, verifyAdmin, async (req, res) => {
     // Generate a random temporary password
     const tempPassword = Math.random().toString(36).slice(-8);
     properties["password"] = tempPassword;
+    properties["needsSetup"] = true;
     // Check if this is the documentation email
     if (
       reqBody.userEmail !=
@@ -356,6 +361,10 @@ router.get("/roles", verifyToken, verifyAdmin, async (req, res) => {
   const allRoles = await Role.findAll({
     raw: true,
     attributes: { exclude: ["createdAt", "updatedAt"] },
+  });
+  // Convert all permissions to JSON object
+  allRoles.forEach((role) => {
+    role.permissions = JSON.parse(role.permissions);
   });
   res.json(allRoles);
 });
