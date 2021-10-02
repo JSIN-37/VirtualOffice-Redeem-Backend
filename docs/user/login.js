@@ -25,7 +25,7 @@ module.exports = {
                 example: "true",
               },
             },
-            required: ["email", "password"],
+            required: ["email", "password", "rememberMe"],
           },
         },
       },
@@ -80,6 +80,14 @@ module.exports = {
                     },
                     permissions: {
                       $ref: "#/components/schemas/userPermissions",
+                    },
+                    contactNumber: {
+                      type: "string",
+                      example: "0712345678",
+                    },
+                    profilePicture: {
+                      type: "string",
+                      example: "default.svg",
                     },
                     needsSetup: {
                       type: "boolean",

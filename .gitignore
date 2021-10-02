@@ -5,3 +5,6 @@ log/*
 !log/.gitkeep
 uploads/*
 !uploads/.gitkeep
+!uploads/profile-pics
+uploads/profile-pics/*
+!uploads/profile-pics/default.svg

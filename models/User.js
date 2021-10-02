@@ -36,8 +36,10 @@ const User = db.define("User", {
   dob: Sequelize.DATEONLY,
   gender: Sequelize.STRING,
   address: Sequelize.STRING,
+  contactNumber: Sequelize.STRING,
+  profilePicture: { type: Sequelize.STRING, defaultValue: "default.svg" },
   permissions: Sequelize.JSON,
-  needsSetup: { type: Sequelize.BOOLEAN, allowNull: false, defaultValue: true },
+  needsSetup: { type: Sequelize.BOOLEAN, defaultValue: true },
 });
 
 // Relations

@@ -82,6 +82,14 @@ module.exports = {
                     type: "string",
                     example: "04/1 Example Road, Example City.",
                   },
+                  contactNumber: {
+                    type: "string",
+                    example: "0712345678",
+                  },
+                  profilePicture: {
+                    type: "string",
+                    example: "default.svg",
+                  },
                   permissions: {
                     $ref: "#/components/schemas/userPermissions",
                   },
