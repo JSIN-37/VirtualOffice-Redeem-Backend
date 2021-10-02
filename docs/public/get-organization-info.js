@@ -1,7 +1,8 @@
 module.exports = {
   get: {
     tags: ["Public Operations"],
-    description: "Gets organization's common information.",
+    description:
+      "Gets organization's common information. <br> Also get organization's logo from SERVER_URL/uploads/ORGANIZATION_LOGO.JPEG.<br> e.g. https://localhost:9090/uploads/ORGANIZATION_LOGO.JPEG",
     operationId: "publicGetOrganizationInfo",
     parameters: [],
     responses: {

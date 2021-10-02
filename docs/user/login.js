@@ -2,7 +2,7 @@ module.exports = {
   post: {
     tags: ["User Operations"],
     description:
-      "User login. Upon successful authentication, a JWT token will be returned that can be used for subsequent API authentication. If rememberMe is set, the token will be generated with a longer expiry.",
+      "User login. Upon successful authentication, a JWT token will be returned that can be used for subsequent API authentication. If rememberMe is set, the token will be generated with a longer expiry. <br> Get user's profile picture from SERVER_URL/uploads/profile-pics/{profilePicture}.<br> e.g. https://localhost:9090/uploads/profile-pics/{profilePicture}",
     operationId: "userLogin",
     parameters: [],
     requestBody: {
