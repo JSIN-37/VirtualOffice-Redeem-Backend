@@ -69,4 +69,19 @@ if (cfg.HTTP_ENABLED == "true") {
 // Serve the uploads folder
 app.use("/uploads", express.static(__dirname + "/../uploads"));
 
+// Log all requests
+app.use((req, res, next) => {
+  // https://stackoverflow.com/questions/12525928/how-to-get-request-path-with-express-req-object
+  if (cfg.DEBUGGING_MODE) {
+    console.log(
+      `*** ${req.protocol.toUpperCase()} ${req.method} ${req.baseUrl}${
+        req.path
+      }`
+    );
+    res.on("finish", () => {
+      console.log("--------------------------------------------------");
+    });
+  }
+  next();
+});
 module.exports = app;
