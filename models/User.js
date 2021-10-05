@@ -38,7 +38,7 @@ const User = db.define("User", {
   address: Sequelize.STRING,
   contactNumber: Sequelize.STRING,
   profilePicture: { type: Sequelize.STRING, defaultValue: "default.svg" },
-  permissions: Sequelize.JSON,
+  permissions: Sequelize.TEXT('medium'),
   needsSetup: { type: Sequelize.BOOLEAN, defaultValue: true },
 });
 

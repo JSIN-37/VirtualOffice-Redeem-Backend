@@ -260,7 +260,7 @@ router.post("/user", verifyToken, verifyAdmin, async (req, res) => {
       password: tempPassword,
       DivisionId: inputs.userDivisionId,
       RoleId: inputs.userRoleId,
-      permissions: JSON.parse(selectedRole.permissions),
+      permissions: selectedRole.permissions,
     });
     // Check if this is the documentation email
     if (
@@ -343,11 +343,11 @@ router.put("/user/:id", verifyToken, verifyAdmin, async (req, res) => {
       attributes: ["permissions"],
       where: { id: reqBody.userRoleId },
     });
-    properties["permissions"] = JSON.parse(selectedRole.permissions);
+    properties["permissions"] = selectedRole.permissions;
   }
   // If permissions are again defined here, it takes priority
   if (reqBody.userPermissions)
-    properties["permissions"] = reqBody.userPermissions;
+    properties["permissions"] = JSON.stringify(reqBody.userPermissions);
   await User.update(properties, {
     where: {
       id: inputs.idParam,
@@ -382,7 +382,7 @@ router.post("/role", verifyToken, verifyAdmin, async (req, res) => {
   await Role.create({
     name: inputs.roleName,
     description: inputs.roleDescription,
-    permissions: inputs.rolePermissions,
+    permissions: JSON.stringify(inputs.rolePermissions),
   });
   res.json({ success: "New role created." });
 });
@@ -403,7 +403,7 @@ router.put("/role/:id", verifyToken, verifyAdmin, async (req, res) => {
     {
       name: inputs.roleName,
       description: inputs.roleDescription,
-      permissions: inputs.rolePermissions,
+      permissions: JSON.stringify(inputs.rolePermissions),
     },
     {
       where: {
@@ -416,7 +416,7 @@ router.put("/role/:id", verifyToken, verifyAdmin, async (req, res) => {
     const User = require("../models/User");
     await User.update(
       {
-        permissions: inputs.rolePermissions,
+        permissions: JSON.stringify(inputs.rolePermissions),
       },
       {
         where: {

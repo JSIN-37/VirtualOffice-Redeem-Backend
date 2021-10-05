@@ -47,12 +47,12 @@ module.exports = async () => {
     let worker = await Role.create({
       name: "Worker",
       description: "Default Worker role.",
-      permissions: examplePermissions,
+      permissions: JSON.stringify(examplePermissions),
     });
     let hod = await Role.create({
       name: "Head of Division",
       description: "Default Head of Division role.",
-      permissions: examplePermissions,
+      permissions: JSON.stringify(examplePermissions),
     });
     // Create a division for the default users
     let division = await Division.create({
@@ -71,7 +71,7 @@ module.exports = async () => {
       contactNumber: "0712345678",
       RoleId: worker.id,
       DivisionId: division.id,
-      permissions: examplePermissions,
+      permissions: JSON.stringify(examplePermissions),
       needsSetup: false,
     });
     await User.create({
@@ -85,7 +85,7 @@ module.exports = async () => {
       contactNumber: "0787654321",
       RoleId: hod.id,
       DivisionId: division.id,
-      permissions: examplePermissions,
+      permissions: JSON.stringify(examplePermissions),
       needsSetup: false,
     });
     console.log("(✔) Default data imported.");
