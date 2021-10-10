@@ -143,7 +143,7 @@ router.put("/password", verifyToken, async (req, res) => {
   });
   if (loginUser) {
     await User.update(
-      { password: inputs.userNewPassword },
+      { password: inputs.userNewPassword, needsSetup: false },
       {
         where: {
           id: reqUser.id,
