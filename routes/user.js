@@ -75,6 +75,10 @@ router.post("/login", async (req, res) => {
   } else res.status(401).json({ error: "User login failed." });
 });
 
+router.get("/validate-token", verifyToken, (req, res) => {
+  res.json({ success: "Token is still valid." });
+});
+
 router.put("/email", verifyToken, async (req, res) => {
   // Request User Details
   const reqUser = req.authData;

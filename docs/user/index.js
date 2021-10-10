@@ -4,10 +4,14 @@ const updateEmail = require("./update-email");
 const updatePassword = require("./update-password");
 const updateProfileInfo = require("./update-profile-info");
 const updateProfilePic = require("./update-profile-pic");
+const validateToken = require("./validate-token");
 
 module.exports = {
   "/user/login": {
     ...login,
+  },
+  "/user/validate-token": {
+    ...validateToken,
   },
   "/user/email": {
     ...updateEmail,
