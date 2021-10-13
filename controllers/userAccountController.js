@@ -216,7 +216,7 @@ exports.userUpdateProfilePic = async (req, res) => {
     attributes: ["profilePicture"],
     where: { id: reqUser.id },
   });
-  const { uploadProfilePic } = require("../core/multer");
+  const { uploadProfilePic } = require("../core/uploads");
   uploadProfilePic(req, res, async (err) => {
     // Request Inputs
     const inputs = {

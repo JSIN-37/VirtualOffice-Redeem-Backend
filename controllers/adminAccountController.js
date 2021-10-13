@@ -80,7 +80,7 @@ exports.adminUpdateOrganizationInfo = async (req, res) => {
 };
 
 exports.adminUpdateOrganizationLogo = (req, res) => {
-  const { uploadLogo } = require("../core/multer");
+  const { uploadLogo } = require("../core/uploads");
   uploadLogo(req, res, (err) => {
     // Request Inputs
     const inputs = {

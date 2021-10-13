@@ -10,12 +10,12 @@ require("./core/database");
 require("./core/email");
 // Express
 const app = require("./core/express");
-// Multer
-require("./core/multer");
+
 // Welcome message
 app.get(`/api`, (req, res) => {
   res.json({ success: `You've reached VirtualOffice API.` });
 });
+
 // Swagger documentation
 if (cfg.SERVE_DOCUMENTATION == "true") {
   const swaggerUI = require("swagger-ui-express");
@@ -25,6 +25,7 @@ if (cfg.SERVE_DOCUMENTATION == "true") {
     `*** API Documentation: https://${cfg.HOST_NAME}:${cfg.HTTPS_PORT}/api/docs`
   );
 }
+
 // Routes
 const publicRouter = require("./routes/publicRoutes");
 const adminRouter = require("./routes/adminRoutes");
