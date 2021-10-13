@@ -20,3 +20,13 @@ if (fs.existsSync("./config/production.cfg")) {
 }
 
 process.env.NEEDS_INITIAL_SETUP = true; // By default let's say yes, check with database later
+
+// // Setup paths for ease-of-use ? Possible use-case ?
+// const dirs = fs
+//   .readdirSync(".", { withFileTypes: true })
+//   .filter((dirEntry) => dirEntry.isDirectory())
+//   .map((dirEntry) => dirEntry.name);
+
+// for (const dir in dirs) {
+//   process.env["path_" + dirs[dir]] = `${process.cwd()}/${dirs[dir]}`;
+// }

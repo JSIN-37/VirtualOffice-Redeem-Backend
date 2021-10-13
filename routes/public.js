@@ -1,35 +1,13 @@
 // PUBLIC ROUTES
-const cfg = process.env; // Get server configurations
+const router = require("express").Router();
 
-const express = require("express");
-const router = express.Router();
+const {
+  getOrganizationInfo,
+  getServerStatus,
+} = require("../controllers/publicController");
 
-router.get("/server-status", (req, res) => {
-  res.json({
-    serverReady: true,
-    serverInitialized: cfg.NEEDS_INITIAL_SETUP == "true" ? false : true,
-  });
-});
+router.get("/server-status", getServerStatus);
 
-router.get("/organization-info", async (req, res) => {
-  // Response Body Content
-  const resBody = {
-    organizationName: "",
-    organizationCountry: "",
-    organizationContactNumber: "",
-    organizationAddress: "",
-  };
-  ///////////////
-  const Settings = require("../models/Settings");
-  for (var key in resBody) {
-    const setting = await Settings.findOne({
-      raw: true,
-      attributes: ["voValue"],
-      where: { voOption: key },
-    });
-    resBody[key] = setting.voValue;
-  }
-  res.json(resBody);
-});
+router.get("/organization-info", getOrganizationInfo);
 
 module.exports = router;
