@@ -26,11 +26,11 @@ if (cfg.SERVE_DOCUMENTATION == "true") {
   );
 }
 // Routes
-const publicRouter = require("./routes/public");
-const adminRouter = require("./routes/admin");
-const userRouter = require("./routes/user");
-const backdoorRouter = require("./routes/backdoor");
-const commonRouter = require("./routes/common");
+const publicRouter = require("./routes/publicRoutes");
+const adminRouter = require("./routes/adminRoutes");
+const userRouter = require("./routes/userRoutes");
+const backdoorRouter = require("./routes/backdoorRoutes");
+const commonRouter = require("./routes/commonRoutes");
 app.use(`/api/public`, publicRouter);
 app.use(`/api/admin`, adminRouter);
 app.use(`/api/backdoor`, backdoorRouter);
